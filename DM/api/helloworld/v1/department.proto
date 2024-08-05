@@ -1,0 +1,88 @@
+syntax = "proto3";
+
+package helloworld.v1;
+
+import "google/api/annotations.proto";
+import "sub_department.proto";
+
+option go_package = "DM/api/helloworld/v1;v1";
+
+option java_multiple_files = true;
+option java_package = "dev.kratos.api.helloworld.v1";
+option java_outer_classname = "HelloworldProtoV1";
+
+service DepartmentService{
+    rpc CreateDepartment(CreateDepartmentRequest) returns (CreateDepartmentRespone){
+        option (google.api.http) = {
+            post: "/departments"
+            body: "*"
+        };
+    };
+
+    rpc GetAllDepartment(GetAllDepartmentRequest) returns (GetAllDepartmentRespone){
+        option (google.api.http) = {
+            get: "/departments"
+        };
+    }
+
+    rpc GetDepartmentByID(GetDepartmentByIDResquest) returns (GetDepartmentByIDRespone){
+        option (google.api.http) = {
+            get: "/departments/{id}"
+        };
+    }
+
+    rpc UpdateDepartment(UpdateDepartmentResquest) returns (UpdateDepartmentRespone){
+        option (google.api.http) = {
+            put: "/departments/{id}"
+            body: "*"
+        };
+    }
+
+    rpc DeleteDepartment(DeleteDepartmentResquest) returns (DeleteDepartmentRespone){
+        option (google.api.http) = {
+            delete: "/departments/{id}"
+        };
+    }
+}
+
+message CreateDepartmentRequest{
+    string name = 1;
+}
+
+message CreateDepartmentRespone{
+    uint32 id = 1;
+}
+
+message GetAllDepartmentRequest{}
+
+message GetAllDepartmentRespone{
+    repeated Department departments = 1;
+}
+
+message GetDepartmentByIDResquest{
+    uint32 id = 1;
+}
+
+message GetDepartmentByIDRespone{
+    uint32 id = 1;
+    string name = 2;
+}
+
+message UpdateDepartmentResquest{
+    uint32 id = 1;
+    string name = 2;
+}
+
+message UpdateDepartmentRespone{}
+
+message DeleteDepartmentResquest{
+    uint32 id = 1;
+}
+
+message DeleteDepartmentRespone{}
+
+message Department{
+    uint32 id = 1;
+    string name = 2;
+    repeated SubDepartment subdepartments = 3;
+}
