@@ -1,47 +1,52 @@
 package biz
 
 import (
-	"DM/internal/models"
+	"DM/internal/entity"
 	"context"
 )
 
 type DepartmentRepo interface {
-	Create(ctx context.Context, dept *models.Department) error
-	GetByID(ctx context.Context, id uint32) (*models.Department, error)
-	Update(ctx context.Context, dept *models.Department) error
+	Create(ctx context.Context, dept *entity.Department) error
+	GetByID(ctx context.Context, id uint32) (*entity.Department, error)
+	Update(ctx context.Context, dept *entity.Department) error
 	Delete(ctx context.Context, id uint32) error
-	GetAll(ctx context.Context) ([]*models.Department, error)
+	GetAll(ctx context.Context) ([]*entity.Department, error)
+	GetByPage(ctx context.Context, page, limit uint32) ([]*entity.Department, error)
 }
 
-type DepartmentService struct {
+type DepartmentUC struct {
 	repo DepartmentRepo
 }
 
-func NewDepartmentService(repo DepartmentRepo) *DepartmentService {
-	return &DepartmentService{repo: repo}
+func NewDepartmentUC(repo DepartmentRepo) *DepartmentUC {
+	return &DepartmentUC{repo: repo}
 }
 
-func (s *DepartmentService) CreateDepartment(ctx context.Context, name string) (uint32, error) {
-	dept := &models.Department{Name: name}
-	if err := s.repo.Create(ctx, dept); err != nil {
+func (uc *DepartmentUC) CreateDepartment(ctx context.Context, name string) (uint32, error) {
+	dept := &entity.Department{Name: name}
+	if err := uc.repo.Create(ctx, dept); err != nil {
 		return 0, err
 	}
 	return dept.ID, nil
 }
 
-func (s *DepartmentService) GetDepartmentByID(ctx context.Context, id uint32) (*models.Department, error) {
-	return s.repo.GetByID(ctx, id)
+func (uc *DepartmentUC) GetDepartmentByID(ctx context.Context, id uint32) (*entity.Department, error) {
+	return uc.repo.GetByID(ctx, id)
 }
 
-func (s *DepartmentService) UpdateDepartment(ctx context.Context, id uint32, name string) error {
-	dept := &models.Department{ID: id, Name: name}
-	return s.repo.Update(ctx, dept)
+func (uc *DepartmentUC) UpdateDepartment(ctx context.Context, id uint32, name string) error {
+	dept := &entity.Department{ID: id, Name: name}
+	return uc.repo.Update(ctx, dept)
 }
 
-func (s *DepartmentService) DeleteDepartment(ctx context.Context, id uint32) error {
-	return s.repo.Delete(ctx, id)
+func (uc *DepartmentUC) DeleteDepartment(ctx context.Context, id uint32) error {
+	return uc.repo.Delete(ctx, id)
 }
 
-func (s *DepartmentService) GetAllDepartment(ctx context.Context) ([]*models.Department, error) {
-	return s.repo.GetAll(ctx)
+func (uc *DepartmentUC) GetAllDepartment(ctx context.Context) ([]*entity.Department, error) {
+	return uc.repo.GetAll(ctx)
+}
+
+func (uc *DepartmentUC) GetDepartmentByPage(ctx context.Context, page, limit uint32) ([]*entity.Department, error) {
+	return uc.repo.GetByPage(ctx, page, limit)
 }

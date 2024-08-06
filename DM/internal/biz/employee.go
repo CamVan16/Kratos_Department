@@ -1,29 +1,30 @@
 package biz
 
 import (
-	"DM/internal/models"
+	"DM/internal/entity"
 	"context"
 )
 
 type EmployeeRepo interface {
-	Create(ctx context.Context, emp *models.Employee) error
-	GetByID(ctx context.Context, id uint32) (*models.Employee, error)
-	Update(ctx context.Context, emp *models.Employee) error
+	Create(ctx context.Context, emp *entity.Employee) error
+	GetByID(ctx context.Context, id uint32) (*entity.Employee, error)
+	Update(ctx context.Context, emp *entity.Employee) error
 	Delete(ctx context.Context, id uint32) error
-	GetAll(ctx context.Context) ([]*models.Employee, error)
-	FindByPhone(ctx context.Context, phone string) (models.Employee, error)
+	GetAll(ctx context.Context) ([]*entity.Employee, error)
+	FindByPhone(ctx context.Context, phone string) (entity.Employee, error)
+	GetByPage(ctx context.Context, page, limit uint32) ([]*entity.Employee, error)
 }
 
-type EmployeeService struct {
+type EmployeeUC struct {
 	repo EmployeeRepo
 }
 
-func NewEmployeeService(repo EmployeeRepo) *EmployeeService {
-	return &EmployeeService{repo: repo}
+func NewEmployeeUC(repo EmployeeRepo) *EmployeeUC {
+	return &EmployeeUC{repo: repo}
 }
 
-func (s *EmployeeService) CreateEmployee(ctx context.Context, name, phone, password, role string, salary uint32, sub_department_id uint32) (*models.Employee, error) {
-	emp := &models.Employee{
+func (uc *EmployeeUC) CreateEmployee(ctx context.Context, name, phone, password, role string, salary uint32, sub_department_id uint32) (*entity.Employee, error) {
+	emp := &entity.Employee{
 		Name:            name,
 		Phone:           phone,
 		Password:        password,
@@ -31,22 +32,22 @@ func (s *EmployeeService) CreateEmployee(ctx context.Context, name, phone, passw
 		Salary:          float64(salary),
 		SubDepartmentID: sub_department_id,
 	}
-	if err := s.repo.Create(ctx, emp); err != nil {
+	if err := uc.repo.Create(ctx, emp); err != nil {
 		return nil, err
 	}
 	return emp, nil
 }
 
-func (s *EmployeeService) GetEnployeeByID(ctx context.Context, id uint32) (*models.Employee, error) {
-	return s.repo.GetByID(ctx, id)
+func (uc *EmployeeUC) GetEnployeeByID(ctx context.Context, id uint32) (*entity.Employee, error) {
+	return uc.repo.GetByID(ctx, id)
 }
 
-func (s *EmployeeService) GetAllEmployee(ctx context.Context) ([]*models.Employee, error) {
-	return s.repo.GetAll(ctx)
+func (uc *EmployeeUC) GetAllEmployee(ctx context.Context) ([]*entity.Employee, error) {
+	return uc.repo.GetAll(ctx)
 }
 
-func (s *EmployeeService) UpdateEmployee(ctx context.Context, id uint32, name, phone, password, role string, salary uint32, sub_department_id uint32) error {
-	emp := &models.Employee{
+func (uc *EmployeeUC) UpdateEmployee(ctx context.Context, id uint32, name, phone, password, role string, salary uint32, sub_department_id uint32) error {
+	emp := &entity.Employee{
 		IDEm:            id,
 		Name:            name,
 		Phone:           phone,
@@ -55,16 +56,17 @@ func (s *EmployeeService) UpdateEmployee(ctx context.Context, id uint32, name, p
 		Role:            role,
 		SubDepartmentID: sub_department_id,
 	}
-	return s.repo.Update(ctx, emp)
+	return uc.repo.Update(ctx, emp)
 }
 
-func (s *EmployeeService) DeleteEmployee(ctx context.Context, id uint32) error {
-	return s.repo.Delete(ctx, id)
+func (uc *EmployeeUC) DeleteEmployee(ctx context.Context, id uint32) error {
+	return uc.repo.Delete(ctx, id)
 }
 
-//	func (s *employeeService) GetEmployeeByPhonePass(phone, pass string) (models.Employee, error) {
-//		return s.repository.FindByPhonePass(phone, pass)
-//	}
-func (s *EmployeeService) GetEmployeeByPhonePass(ctx context.Context, phone string) (models.Employee, error) {
-	return s.repo.FindByPhone(ctx, phone)
+func (uc *EmployeeUC) GetEmployeeByPhonePass(ctx context.Context, phone string) (entity.Employee, error) {
+	return uc.repo.FindByPhone(ctx, phone)
+}
+
+func (uc *EmployeeUC) GetEmployeeByPage(ctx context.Context, page, limit uint32) ([]*entity.Employee, error) {
+	return uc.repo.GetByPage(ctx, page, limit)
 }

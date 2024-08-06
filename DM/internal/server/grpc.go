@@ -1,7 +1,10 @@
 package server
 
 import (
-	v1 "DM/api/helloworld/v1"
+	v1 "DM/api/department/v1"
+	v3 "DM/api/employee/v1"
+	v2 "DM/api/sub_department/v1"
+	v4 "DM/api/user/v1"
 	"DM/internal/conf"
 	"DM/internal/service"
 
@@ -29,8 +32,8 @@ func NewGRPCServer(c *conf.Server, department *service.DepartmentService, subDep
 	}
 	srv := grpc.NewServer(opts...)
 	v1.RegisterDepartmentServiceServer(srv, department)
-	v1.RegisterSubDepartmentServiceServer(srv, subDepartment)
-	v1.RegisterEmployeeServiceServer(srv, employee)
-	v1.RegisterUserServiceServer(srv, user)
+	v2.RegisterSubDepartmentServiceServer(srv, subDepartment)
+	v3.RegisterEmployeeServiceServer(srv, employee)
+	v4.RegisterUserServiceServer(srv, user)
 	return srv
 }

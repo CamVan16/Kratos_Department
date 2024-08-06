@@ -1,10 +1,9 @@
 package server
 
 import (
+	"DM/internal/biz"
 	"context"
 	"strings"
-
-	"DM/internal/token"
 
 	"github.com/go-kratos/kratos/v2/errors"
 	"github.com/go-kratos/kratos/v2/middleware"
@@ -51,7 +50,7 @@ func AuthMiddleware(allowedRoles ...string) middleware.Middleware {
 					}
 
 					tokenString = strings.TrimPrefix(tokenString, "Bearer ")
-					claims, err := token.ParseJWT(tokenString)
+					claims, err := biz.ParseJWT(tokenString)
 					if err != nil {
 						return nil, ErrTokenParseFail
 					}

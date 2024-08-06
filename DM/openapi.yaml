@@ -3,15 +3,239 @@
 
 openapi: 3.0.3
 info:
-    title: Greeter API
-    description: The greeting service definition.
+    title: ""
     version: 0.0.1
 paths:
+    /departments:
+        get:
+            tags:
+                - DepartmentService
+            operationId: DepartmentService_GetAllDepartment
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/helloworld.v1.GetAllDepartmentRespone'
+        post:
+            tags:
+                - DepartmentService
+            operationId: DepartmentService_CreateDepartment
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/helloworld.v1.CreateDepartmentRequest'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/helloworld.v1.CreateDepartmentRespone'
+    /departments/page:
+        get:
+            tags:
+                - DepartmentService
+            operationId: DepartmentService_GetDepartmentByPage
+            parameters:
+                - name: page
+                  in: query
+                  schema:
+                    type: integer
+                    format: uint32
+                - name: limit
+                  in: query
+                  schema:
+                    type: integer
+                    format: uint32
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/helloworld.v1.GetDepartmentByPageRespone'
+    /departments/{id}:
+        get:
+            tags:
+                - DepartmentService
+            operationId: DepartmentService_GetDepartmentByID
+            parameters:
+                - name: id
+                  in: path
+                  required: true
+                  schema:
+                    type: integer
+                    format: uint32
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/helloworld.v1.GetDepartmentByIDRespone'
+        put:
+            tags:
+                - DepartmentService
+            operationId: DepartmentService_UpdateDepartment
+            parameters:
+                - name: id
+                  in: path
+                  required: true
+                  schema:
+                    type: integer
+                    format: uint32
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/helloworld.v1.UpdateDepartmentResquest'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/helloworld.v1.UpdateDepartmentRespone'
+        delete:
+            tags:
+                - DepartmentService
+            operationId: DepartmentService_DeleteDepartment
+            parameters:
+                - name: id
+                  in: path
+                  required: true
+                  schema:
+                    type: integer
+                    format: uint32
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/helloworld.v1.DeleteDepartmentRespone'
+    /employees:
+        get:
+            tags:
+                - EmployeeService
+            operationId: EmployeeService_GetAllEmployee
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/helloworld.v1.GetAllEmployeeRespone'
+        post:
+            tags:
+                - EmployeeService
+            operationId: EmployeeService_CreateEmployee
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/helloworld.v1.CreateEmployeeRequest'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/helloworld.v1.CreateEmployeeRespone'
+    /employees/page:
+        get:
+            tags:
+                - EmployeeService
+            operationId: EmployeeService_GetEmployeeByPage
+            parameters:
+                - name: page
+                  in: query
+                  schema:
+                    type: integer
+                    format: uint32
+                - name: limit
+                  in: query
+                  schema:
+                    type: integer
+                    format: uint32
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/helloworld.v1.GetEmployeeByPageRespone'
+    /employees/{id}:
+        get:
+            tags:
+                - EmployeeService
+            operationId: EmployeeService_GetEmployeeByID
+            parameters:
+                - name: id
+                  in: path
+                  required: true
+                  schema:
+                    type: integer
+                    format: uint32
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/helloworld.v1.GetEmployeeByIDRespone'
+        put:
+            tags:
+                - EmployeeService
+            operationId: EmployeeService_UpdateEmployee
+            parameters:
+                - name: id
+                  in: path
+                  required: true
+                  schema:
+                    type: integer
+                    format: uint32
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/helloworld.v1.UpdateEmployeeResquest'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/helloworld.v1.UpdateEmployeeRespone'
+        delete:
+            tags:
+                - EmployeeService
+            operationId: EmployeeService_DeleteEmployee
+            parameters:
+                - name: id
+                  in: path
+                  required: true
+                  schema:
+                    type: integer
+                    format: uint32
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/helloworld.v1.DeleteEmployeeRespone'
     /helloworld/{name}:
         get:
             tags:
                 - Greeter
-                - subgroup
             description: Sends a greeting
             operationId: Greeter_SayHello
             parameters:
@@ -27,13 +251,558 @@ paths:
                         application/json:
                             schema:
                                 $ref: '#/components/schemas/helloworld.v1.HelloReply'
+    /sub_departments:
+        get:
+            tags:
+                - SubDepartmentService
+            operationId: SubDepartmentService_GetAllSubDepartment
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/helloworld.v1.GetAllSubDepartmentRespone'
+        post:
+            tags:
+                - SubDepartmentService
+            operationId: SubDepartmentService_CreateSubDepartment
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/helloworld.v1.CreateSubDepartmentRequest'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/helloworld.v1.CreateSubDepartmentRespone'
+    /sub_departments/page:
+        get:
+            tags:
+                - SubDepartmentService
+            operationId: SubDepartmentService_GetSubDepartmentByPage
+            parameters:
+                - name: page
+                  in: query
+                  schema:
+                    type: integer
+                    format: uint32
+                - name: limit
+                  in: query
+                  schema:
+                    type: integer
+                    format: uint32
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/helloworld.v1.GetSubDepartmentByPageRespone'
+    /sub_departments/{id}:
+        get:
+            tags:
+                - SubDepartmentService
+            operationId: SubDepartmentService_GetSubDepartmentByID
+            parameters:
+                - name: id
+                  in: path
+                  required: true
+                  schema:
+                    type: integer
+                    format: uint32
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/helloworld.v1.GetSubDepartmentByIDRespone'
+        put:
+            tags:
+                - SubDepartmentService
+            operationId: SubDepartmentService_UpdateSubDepartment
+            parameters:
+                - name: id
+                  in: path
+                  required: true
+                  schema:
+                    type: integer
+                    format: uint32
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/helloworld.v1.UpdateSubDepartmentResquest'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/helloworld.v1.UpdateSubDepartmentRespone'
+        delete:
+            tags:
+                - SubDepartmentService
+            operationId: SubDepartmentService_DeleteSubDepartment
+            parameters:
+                - name: id
+                  in: path
+                  required: true
+                  schema:
+                    type: integer
+                    format: uint32
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/helloworld.v1.DeleteSubDepartmentRespone'
+    /users:
+        get:
+            tags:
+                - UserService
+            operationId: UserService_GetAllUser
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/helloworld.v1.GetAllUserRespone'
+        post:
+            tags:
+                - UserService
+            operationId: UserService_SignUpUser
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/helloworld.v1.SignUpUserRequest'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/helloworld.v1.SignUpUserRespone'
+    /users/page:
+        get:
+            tags:
+                - UserService
+            operationId: UserService_GetUserByPage
+            parameters:
+                - name: page
+                  in: query
+                  schema:
+                    type: integer
+                    format: uint32
+                - name: limit
+                  in: query
+                  schema:
+                    type: integer
+                    format: uint32
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/helloworld.v1.GetUsertByPageRespone'
+    /users/refresh_access_token:
+        post:
+            tags:
+                - UserService
+            operationId: UserService_RefreshAccessToken
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/helloworld.v1.RefreshAccessTokenRequest'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/helloworld.v1.RefreshAccessTokenRespone'
+    /users/signin:
+        post:
+            tags:
+                - UserService
+            operationId: UserService_SignInUser
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/helloworld.v1.SignInUserRequest'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/helloworld.v1.SignInUserRespone'
+    /users/{id}:
+        delete:
+            tags:
+                - UserService
+            operationId: UserService_DeleteUser
+            parameters:
+                - name: id
+                  in: path
+                  required: true
+                  schema:
+                    type: integer
+                    format: uint32
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/helloworld.v1.DeleteUserRespone'
 components:
     schemas:
+        helloworld.v1.CreateDepartmentRequest:
+            type: object
+            properties:
+                name:
+                    type: string
+        helloworld.v1.CreateDepartmentRespone:
+            type: object
+            properties:
+                id:
+                    type: integer
+                    format: uint32
+        helloworld.v1.CreateEmployeeRequest:
+            type: object
+            properties:
+                name:
+                    type: string
+                phone:
+                    type: string
+                password:
+                    type: string
+                role:
+                    type: string
+                salary:
+                    type: integer
+                    format: uint32
+                subDepartmentId:
+                    type: integer
+                    format: uint32
+        helloworld.v1.CreateEmployeeRespone:
+            type: object
+            properties:
+                id:
+                    type: integer
+                    format: uint32
+        helloworld.v1.CreateSubDepartmentRequest:
+            type: object
+            properties:
+                name:
+                    type: string
+                departmentId:
+                    type: integer
+                    format: uint32
+        helloworld.v1.CreateSubDepartmentRespone:
+            type: object
+            properties:
+                id:
+                    type: integer
+                    format: uint32
+        helloworld.v1.DeleteDepartmentRespone:
+            type: object
+            properties: {}
+        helloworld.v1.DeleteEmployeeRespone:
+            type: object
+            properties: {}
+        helloworld.v1.DeleteSubDepartmentRespone:
+            type: object
+            properties: {}
+        helloworld.v1.DeleteUserRespone:
+            type: object
+            properties: {}
+        helloworld.v1.Department:
+            type: object
+            properties:
+                id:
+                    type: integer
+                    format: uint32
+                name:
+                    type: string
+                subdepartments:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/helloworld.v1.SubDepartment'
+        helloworld.v1.Employee:
+            type: object
+            properties:
+                id:
+                    type: integer
+                    format: uint32
+                name:
+                    type: string
+                phone:
+                    type: string
+                password:
+                    type: string
+                salary:
+                    type: integer
+                    format: uint32
+                role:
+                    type: string
+                subDepartmentId:
+                    type: integer
+                    format: uint32
+        helloworld.v1.GetAllDepartmentRespone:
+            type: object
+            properties:
+                departments:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/helloworld.v1.Department'
+        helloworld.v1.GetAllEmployeeRespone:
+            type: object
+            properties:
+                employees:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/helloworld.v1.Employee'
+        helloworld.v1.GetAllSubDepartmentRespone:
+            type: object
+            properties:
+                subdepartments:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/helloworld.v1.SubDepartment'
+        helloworld.v1.GetAllUserRespone:
+            type: object
+            properties:
+                users:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/helloworld.v1.User'
+        helloworld.v1.GetDepartmentByIDRespone:
+            type: object
+            properties:
+                id:
+                    type: integer
+                    format: uint32
+                name:
+                    type: string
+        helloworld.v1.GetDepartmentByPageRespone:
+            type: object
+            properties:
+                departments:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/helloworld.v1.Department'
+        helloworld.v1.GetEmployeeByIDRespone:
+            type: object
+            properties:
+                id:
+                    type: integer
+                    format: uint32
+                name:
+                    type: string
+                phone:
+                    type: string
+                password:
+                    type: string
+                role:
+                    type: string
+                salary:
+                    type: integer
+                    format: uint32
+                subDepartmentId:
+                    type: integer
+                    format: uint32
+        helloworld.v1.GetEmployeeByPageRespone:
+            type: object
+            properties:
+                employees:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/helloworld.v1.Employee'
+        helloworld.v1.GetSubDepartmentByIDRespone:
+            type: object
+            properties:
+                id:
+                    type: integer
+                    format: uint32
+                name:
+                    type: string
+        helloworld.v1.GetSubDepartmentByPageRespone:
+            type: object
+            properties:
+                subdepartments:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/helloworld.v1.SubDepartment'
+        helloworld.v1.GetUsertByPageRespone:
+            type: object
+            properties:
+                users:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/helloworld.v1.User'
         helloworld.v1.HelloReply:
             type: object
             properties:
                 message:
                     type: string
             description: The response message containing the greetings
+        helloworld.v1.RefreshAccessTokenRequest:
+            type: object
+            properties:
+                refreshToken:
+                    type: string
+        helloworld.v1.RefreshAccessTokenRespone:
+            type: object
+            properties:
+                accessToken:
+                    type: string
+        helloworld.v1.SignInUserRequest:
+            type: object
+            properties:
+                phone:
+                    type: string
+                password:
+                    type: string
+                role:
+                    type: string
+        helloworld.v1.SignInUserRespone:
+            type: object
+            properties:
+                accessToken:
+                    type: string
+                refreshToken:
+                    type: string
+        helloworld.v1.SignUpUserRequest:
+            type: object
+            properties:
+                phone:
+                    type: string
+                password:
+                    type: string
+                confirmpass:
+                    type: string
+                isEmployee:
+                    type: boolean
+                role:
+                    type: string
+        helloworld.v1.SignUpUserRespone:
+            type: object
+            properties:
+                id:
+                    type: integer
+                    format: uint32
+                phone:
+                    type: string
+                password:
+                    type: string
+                isEmployee:
+                    type: boolean
+                role:
+                    type: string
+        helloworld.v1.SubDepartment:
+            type: object
+            properties:
+                id:
+                    type: integer
+                    format: uint32
+                name:
+                    type: string
+                departmentId:
+                    type: integer
+                    format: uint32
+                employees:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/helloworld.v1.Employee'
+        helloworld.v1.UpdateDepartmentRespone:
+            type: object
+            properties: {}
+        helloworld.v1.UpdateDepartmentResquest:
+            type: object
+            properties:
+                id:
+                    type: integer
+                    format: uint32
+                name:
+                    type: string
+        helloworld.v1.UpdateEmployeeRespone:
+            type: object
+            properties: {}
+        helloworld.v1.UpdateEmployeeResquest:
+            type: object
+            properties:
+                id:
+                    type: integer
+                    format: uint32
+                name:
+                    type: string
+                phone:
+                    type: string
+                password:
+                    type: string
+                role:
+                    type: string
+                salary:
+                    type: integer
+                    format: uint32
+                subDepartmentId:
+                    type: integer
+                    format: uint32
+        helloworld.v1.UpdateSubDepartmentRespone:
+            type: object
+            properties: {}
+        helloworld.v1.UpdateSubDepartmentResquest:
+            type: object
+            properties:
+                id:
+                    type: integer
+                    format: uint32
+                name:
+                    type: string
+                departmentId:
+                    type: integer
+                    format: uint32
+        helloworld.v1.User:
+            type: object
+            properties:
+                id:
+                    type: integer
+                    format: uint32
+                phone:
+                    type: string
+                password:
+                    type: string
+                confirmpass:
+                    type: string
+                isEmployee:
+                    type: boolean
+                role:
+                    type: string
+                accessToken:
+                    type: string
+                refreshToken:
+                    type: string
 tags:
+    - name: DepartmentService
+    - name: EmployeeService
     - name: Greeter
+      description: The greeting service definition.
+    - name: SubDepartmentService
+    - name: UserService

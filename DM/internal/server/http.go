@@ -1,7 +1,10 @@
 package server
 
 import (
-	v1 "DM/api/helloworld/v1"
+	v1 "DM/api/department/v1"
+	v3 "DM/api/employee/v1"
+	v2 "DM/api/sub_department/v1"
+	v4 "DM/api/user/v1"
 	"DM/internal/conf"
 	"DM/internal/service"
 
@@ -30,8 +33,8 @@ func NewHTTPServer(c *conf.Server, deptService *service.DepartmentService, subDe
 	}
 	srv := http.NewServer(opts...)
 	v1.RegisterDepartmentServiceHTTPServer(srv, deptService)
-	v1.RegisterSubDepartmentServiceHTTPServer(srv, subDepartment)
-	v1.RegisterEmployeeServiceHTTPServer(srv, employee)
-	v1.RegisterUserServiceHTTPServer(srv, user)
+	v2.RegisterSubDepartmentServiceHTTPServer(srv, subDepartment)
+	v3.RegisterEmployeeServiceHTTPServer(srv, employee)
+	v4.RegisterUserServiceHTTPServer(srv, user)
 	return srv
 }

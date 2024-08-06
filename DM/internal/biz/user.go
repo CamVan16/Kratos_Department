@@ -1,8 +1,7 @@
 package biz
 
 import (
-	"DM/internal/models"
-	"DM/internal/token"
+	"DM/internal/entity"
 	"context"
 	"errors"
 	"fmt"
@@ -13,23 +12,23 @@ import (
 )
 
 type UserRepository interface {
-	SignUp(ctx context.Context, user *models.User) error
-	SignIn(ctx context.Context, phone string) (models.User, error)
-	//UpdateToken(ctx context.Context, refresh_token string) error
-	FindAll(ctx context.Context) ([]models.User, error)
+	SignUp(ctx context.Context, user *entity.User) error
+	SignIn(ctx context.Context, phone string) (entity.User, error)
+	FindAll(ctx context.Context) ([]entity.User, error)
 	Delete(ctx context.Context, id uint) error
+	GetByPage(ctx context.Context, page, limit uint32) ([]*entity.User, error)
 }
 
-type UserService struct {
+type UserUC struct {
 	userRepo     UserRepository
 	employeeRepo EmployeeRepo
 }
 
-func NewUserService(userRepo UserRepository, employeeRepo EmployeeRepo) *UserService {
-	return &UserService{userRepo, employeeRepo}
+func NewUserUC(userRepo UserRepository, employeeRepo EmployeeRepo) *UserUC {
+	return &UserUC{userRepo, employeeRepo}
 }
 
-func (s *UserService) SignUpUser(ctx context.Context, phone, password, confirmpass string, isemployee bool, role string) (uint32, string, string, bool, string) {
+func (uc *UserUC) SignUpUser(ctx context.Context, phone, password, confirmpass string, isemployee bool, role string) (uint32, string, string, bool, string) {
 	hash, err := bcrypt.GenerateFromPassword([]byte(password), bcrypt.DefaultCost)
 	if err != nil {
 		fmt.Println(err)
@@ -38,7 +37,7 @@ func (s *UserService) SignUpUser(ctx context.Context, phone, password, confirmpa
 
 	var employeeID = randomIDEm()
 	if isemployee {
-		employee := &models.Employee{
+		employee := &entity.Employee{
 			//IDEm:            uint32(employeeID),
 			Name:            "van",
 			Phone:           phone,
@@ -47,20 +46,20 @@ func (s *UserService) SignUpUser(ctx context.Context, phone, password, confirmpa
 			Salary:          0,
 			SubDepartmentID: 2,
 		}
-		if err := s.employeeRepo.Create(ctx, employee); err != nil {
+		if err := uc.employeeRepo.Create(ctx, employee); err != nil {
 			return 0, "", "", false, ""
 		}
 	}
-	user := &models.User{Phone: phone, Password: password, ConfirmPass: password, IsEmployee: isemployee, Role: role}
+	user := &entity.User{Phone: phone, Password: password, ConfirmPass: password, IsEmployee: isemployee, Role: role}
 	user.IDUser = uint32(employeeID)
-	if err := s.userRepo.SignUp(ctx, user); err != nil {
+	if err := uc.userRepo.SignUp(ctx, user); err != nil {
 		return 0, "", "", false, ""
 	}
 	return user.IDUser, user.Phone, user.Password, user.IsEmployee, user.Role
 }
 
-func (s *UserService) SignInUser(ctx context.Context, phone, password, role string) (string, string, error) {
-	user, err := s.userRepo.SignIn(ctx, phone)
+func (uc *UserUC) SignInUser(ctx context.Context, phone, password, role string) (string, string, error) {
+	user, err := uc.userRepo.SignIn(ctx, phone)
 	if err != nil {
 		return "", "", errors.New("invalid phone or password")
 	}
@@ -71,7 +70,7 @@ func (s *UserService) SignInUser(ctx context.Context, phone, password, role stri
 	}
 
 	if user.IsEmployee {
-		emp, err := s.employeeRepo.FindByPhone(ctx, phone)
+		emp, err := uc.employeeRepo.FindByPhone(ctx, phone)
 		if err != nil {
 			return "", "", errors.New("invalid phone or password employee")
 		}
@@ -81,28 +80,26 @@ func (s *UserService) SignInUser(ctx context.Context, phone, password, role stri
 		}
 	}
 
-	accessToken, err := token.GenerateAccessToken(user.Phone, role, time.Minute*15)
+	accessToken, err := GenerateAccessToken(user.Phone, role, time.Minute*15)
 	if err != nil {
 		return "", "", err
 	}
 
-	refreshToken, err := token.GenerateRefreshToken(user.Phone, time.Hour*24)
+	refreshToken, err := GenerateRefreshToken(user.Phone, time.Hour*24)
 	if err != nil {
 		return "", "", err
 	}
-	// user.AccessToken = accessToken
-	// user.RefreshToken = refreshToken
 	return accessToken, refreshToken, nil
 }
 
-func (s *UserService) RefreshAccessToken(ctx context.Context, refreshToken string) (string, error) {
+func (uc *UserUC) RefreshAccessToken(ctx context.Context, refreshToken string) (string, error) {
 
-	claims, err := token.ParseJWT(refreshToken)
+	claims, err := ParseJWT(refreshToken)
 	if err != nil {
 		return "", errors.New("invalid refresh token")
 	}
 
-	accessToken, err := token.GenerateAccessToken(claims.Phone, claims.Role, time.Minute*15)
+	accessToken, err := GenerateAccessToken(claims.Phone, claims.Role, time.Minute*15)
 	if err != nil {
 		return "", err
 	}
@@ -110,12 +107,16 @@ func (s *UserService) RefreshAccessToken(ctx context.Context, refreshToken strin
 	return accessToken, nil
 }
 
-func (s *UserService) GetAllUser(ctx context.Context) ([]models.User, error) {
-	return s.userRepo.FindAll(ctx)
+func (uc *UserUC) GetAllUser(ctx context.Context) ([]entity.User, error) {
+	return uc.userRepo.FindAll(ctx)
 }
 
-func (s *UserService) DeleteUser(ctx context.Context, id uint) error {
-	return s.userRepo.Delete(ctx, id)
+func (uc *UserUC) DeleteUser(ctx context.Context, id uint) error {
+	return uc.userRepo.Delete(ctx, id)
+}
+
+func (uc *UserUC) GetUserByPage(ctx context.Context, page, limit uint32) ([]*entity.User, error) {
+	return uc.userRepo.GetByPage(ctx, page, limit)
 }
 
 func randomIDEm() uint {
