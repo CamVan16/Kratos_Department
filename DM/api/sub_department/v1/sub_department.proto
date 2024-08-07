@@ -4,11 +4,35 @@ package helloworld.v1;
 
 import "google/api/annotations.proto";
 import "employee/v1/employee.proto";
+import "protoc-gen-openapiv2/options/annotations.proto";
+
 option go_package = "DM/api/sub_department/v1;v1";
 
 option java_multiple_files = true;
 option java_package = "dev.kratos.api.helloworld.v1";
 option java_outer_classname = "HelloworldProtoV1";
+
+option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_swagger) = {
+	info: {
+		title: "Sub_Department",
+		version: "1.0",
+		contact: {
+			name: "Department managerment project",
+			url: "https://github.com/grpc-ecosystem/grpc-gateway",
+			email: "none@example.com",
+		},
+		license: {
+			name: "BSD 3-Clause License",
+			url: "https://github.com/grpc-ecosystem/grpc-gateway/blob/master/LICENSE.txt",
+		},
+		extensions: {
+			key: "x-something-something",
+			value {
+				string_value: "yadda",
+			}
+		}
+  }
+};
 
 service SubDepartmentService{
     rpc CreateSubDepartment(CreateSubDepartmentRequest) returns (CreateSubDepartmentRespone){
@@ -16,11 +40,23 @@ service SubDepartmentService{
             post: "/sub_departments"
             body: "*"
         };
+        option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
+            external_docs: {
+              url: "https://github.com/grpc-ecosystem/grpc-gateway",
+              description: "Create a subdepartment"
+            }
+        };
     };
 
     rpc GetAllSubDepartment(GetAllSubDepartmentRequest) returns (GetAllSubDepartmentRespone){
         option (google.api.http) = {
             get: "/sub_departments"
+        };
+        option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
+            external_docs: {
+              url: "https://github.com/grpc-ecosystem/grpc-gateway",
+              description: "Get all subdepartment"
+            }
         };
     }
 
@@ -28,11 +64,23 @@ service SubDepartmentService{
         option (google.api.http) = {
             get : "/sub_departments/page"
         };
+        option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
+            external_docs: {
+              url: "https://github.com/grpc-ecosystem/grpc-gateway",
+              description: "Get subdepartment per page"
+            }
+        };
     }
 
     rpc GetSubDepartmentByID(GetSubDepartmentByIDResquest) returns (GetSubDepartmentByIDRespone){
         option (google.api.http) = {
             get: "/sub_departments/{id}"
+        };
+        option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
+            external_docs: {
+              url: "https://github.com/grpc-ecosystem/grpc-gateway",
+              description: "Get subdepartment by ID"
+            }
         };
     }
 
@@ -41,11 +89,23 @@ service SubDepartmentService{
             put: "/sub_departments/{id}"
             body: "*"
         };
+        option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
+            external_docs: {
+              url: "https://github.com/grpc-ecosystem/grpc-gateway",
+              description: "Update subdepartment"
+            }
+        };
     }
 
     rpc DeleteSubDepartment(DeleteSubDepartmentResquest) returns (DeleteSubDepartmentRespone){
         option (google.api.http) = {
             delete: "/sub_departments/{id}"
+        };
+        option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
+            external_docs: {
+              url: "https://github.com/grpc-ecosystem/grpc-gateway",
+              description: "Delete a subdepartment"
+            }
         };
     }
 }

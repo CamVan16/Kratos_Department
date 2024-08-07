@@ -3,6 +3,7 @@ syntax = "proto3";
 package helloworld.v1;
 
 import "google/api/annotations.proto";
+import "protoc-gen-openapiv2/options/annotations.proto";
 
 option go_package = "DM/api/user/v1;v1";
 
@@ -10,11 +11,40 @@ option java_multiple_files = true;
 option java_package = "dev.kratos.api.helloworld.v1";
 option java_outer_classname = "HelloworldProtoV1";
 
+option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_swagger) = {
+	info: {
+		title: "User",
+		version: "1.0",
+		contact: {
+			name: "Department management project",
+			url: "https://github.com/grpc-ecosystem/grpc-gateway",
+			email: "none@example.com"
+		},
+		license: {
+			name: "BSD 3-Clause License",
+			url: "https://github.com/grpc-ecosystem/grpc-gateway/blob/master/LICENSE.txt"
+		},
+		extensions: {
+			key: "x-something-something",
+			value {
+				string_value: "yadda"
+			}
+		}
+	}
+};
+
+
 service UserService{
     rpc SignUpUser(SignUpUserRequest) returns (SignUpUserRespone){
         option (google.api.http) = {
             post: "/users"
             body: "*"
+        };
+        option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
+            external_docs: {
+              url: "https://github.com/grpc-ecosystem/grpc-gateway",
+              description: "Sign up an user"
+            }
         };
     };
 
@@ -23,17 +53,35 @@ service UserService{
             post: "/users/signin"
             body: "*"
         };
+        option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
+            external_docs: {
+              url: "https://github.com/grpc-ecosystem/grpc-gateway",
+              description: "Sign in an user"
+            }
+        };
     };
 
     rpc GetAllUser(GetAllUserRequest) returns (GetAllUserRespone){
         option (google.api.http) = {
             get: "/users"
         };
+        option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
+            external_docs: {
+              url: "https://github.com/grpc-ecosystem/grpc-gateway",
+              description: "Get all user"
+            }
+        };
     };
     
     rpc DeleteUser(DeleteUserRequest) returns (DeleteUserRespone){
         option (google.api.http) = {
             delete: "/users/{id}"
+        };
+        option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
+            external_docs: {
+              url: "https://github.com/grpc-ecosystem/grpc-gateway",
+              description: "Delete an user"
+            }
         };
     };
 
@@ -42,10 +90,22 @@ service UserService{
             post : "/users/refresh_access_token"
             body : "*"
         };
+        option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
+            external_docs: {
+              url: "https://github.com/grpc-ecosystem/grpc-gateway",
+              description: "Refresh accesstoken"
+            }
+        };
     }
     rpc GetUserByPage(GetUserByPageRequest) returns (GetUsertByPageRespone){
         option (google.api.http) = {
             get : "/users/page"
+        };
+        option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
+            external_docs: {
+              url: "https://github.com/grpc-ecosystem/grpc-gateway",
+              description: "Get user per page"
+            }
         };
     }
 }
